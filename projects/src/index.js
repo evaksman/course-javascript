@@ -111,8 +111,12 @@ const returnArgumentsArray = (...args) => args;
 //   };
 // }
 
+// function bindFunction(fn, ...args) {
+//   return () => fn(...args);
+// }
+
 function bindFunction(fn, ...args) {
-  return () => fn(...args);
+  return fn.bind(null, ...args);
 }
 
 export {
