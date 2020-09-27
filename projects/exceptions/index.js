@@ -116,29 +116,16 @@ function calculator(number = 0) {
   }
 
   return {
-    sum(...args) {
-      return args.reduce((result, curVal) => {
-        return (result += curVal);
-      }, number);
-    },
-    dif(...args) {
-      return args.reduce((result, curVal) => {
-        return (result -= curVal);
-      }, number);
-    },
-    div(...args) {
-      return args.reduce((result, curVal) => {
+    sum: (...args) => args.reduce((result, curVal) => (result += curVal), number),
+    dif: (...args) => args.reduce((result, curVal) => (result -= curVal), number),
+    div: (...args) =>
+      args.reduce((result, curVal) => {
         if (curVal === 0) {
           throw new Error('division by 0');
         }
         return (result /= curVal);
-      }, number);
-    },
-    mul(...args) {
-      return args.reduce((result, curVal) => {
-        return (result *= curVal);
-      }, number);
-    },
+      }, number),
+    mul: (...args) => args.reduce((result, curVal) => (result *= curVal), number),
   };
 }
 
