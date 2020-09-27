@@ -54,8 +54,9 @@ function map(array, fn) {
 function reduce(array, fn, initial) {
   const hasInitial = typeof initial !== 'undefined';
   let result = hasInitial ? initial : array[0];
+  const startIndex = hasInitial ? 0 : 1;
 
-  for (let i = hasInitial ? 0 : 1; i < array.length; i++) {
+  for (let i = startIndex; i < array.length; i++) {
     result = fn(result, array[i], i, array);
   }
 
@@ -97,7 +98,7 @@ function createProxy(obj) {
   return new Proxy(obj, {
     set(target, prop, val) {
       if (typeof val == 'number') {
-        target[prop] = val * val;
+        target[prop] = Math.pow(val, 2);
         return true;
       } else {
         return false;
