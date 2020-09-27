@@ -17,7 +17,7 @@
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
 function isAllTrue(array, fn) {
-  if (!Array.isArray(array) || !array.length) {
+  if (array.constructor !== Array || !array.length) {
     throw new Error('empty array');
   }
 
@@ -49,7 +49,7 @@ function isAllTrue(array, fn) {
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
 function isSomeTrue(array, fn) {
-  if (!Array.isArray(array) || !array.length) {
+  if (!(array instanceof Array) || !array.length) {
     throw new Error('empty array');
   }
 
@@ -117,44 +117,27 @@ function calculator(number = 0) {
 
   return {
     sum(...args) {
-      let result = number;
-
-      for (const arg of args) {
-        result += arg;
-      }
-
-      return result;
+      return args.reduce((result, curVal) => {
+        return (result += curVal);
+      }, number);
     },
     dif(...args) {
-      let result = number;
-
-      for (const arg of args) {
-        result -= arg;
-      }
-
-      return result;
+      return args.reduce((result, curVal) => {
+        return (result -= curVal);
+      }, number);
     },
     div(...args) {
-      let result = number;
-
-      for (const arg of args) {
-        if (arg === 0) {
+      return args.reduce((result, curVal) => {
+        if (curVal === 0) {
           throw new Error('division by 0');
         }
-
-        result /= arg;
-      }
-
-      return result;
+        return (result /= curVal);
+      }, number);
     },
     mul(...args) {
-      let result = number;
-
-      for (const arg of args) {
-        result *= arg;
-      }
-
-      return result;
+      return args.reduce((result, curVal) => {
+        return (result *= curVal);
+      }, number);
     },
   };
 }
