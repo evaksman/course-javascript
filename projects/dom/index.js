@@ -199,7 +199,33 @@ const collectDOMStat = (root) => {
      nodes: [div]
    }
  */
-function observeChildNodes(where, fn) {}
+function observeChildNodes(where, fn) {
+  // Конфигурация observer (за какими изменениями наблюдать)
+  const config = {
+    childList: true,
+    subtree: true,
+  };
+
+  // Функция обратного вызова при срабатывании мутации
+  const callback = (mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === 'childList') {
+        fn({
+          type: mutation.addedNodes.length ? 'insert' : 'remove',
+          nodes: [
+            ...(mutation.addedNodes.length ? mutation.addedNodes : mutation.removedNodes),
+          ],
+        });
+      }
+    }
+  };
+
+  // Создаем экземпляр наблюдателя с указанной функцией обратного вызова
+  const observer = new MutationObserver(callback);
+
+  // Начинаем наблюдение за настроенными изменениями целевого элемента
+  observer.observe(where, config);
+}
 
 export {
   createDivWithText,
