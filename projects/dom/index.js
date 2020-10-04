@@ -10,7 +10,11 @@
  Пример:
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
-function createDivWithText(text) {}
+const createDivWithText = (text) => {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div;
+};
 
 /*
  Задание 2:
@@ -20,7 +24,7 @@ function createDivWithText(text) {}
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
-function prepend(what, where) {}
+const prepend = (what, where) => where.prepend(what);
 
 /*
  Задание 3:
@@ -41,7 +45,15 @@ function prepend(what, where) {}
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
-function findAllPSiblings(where) {}
+const findAllPSiblings = (where) => {
+  const beforeP = [];
+
+  for (const node of where.children) {
+    if (node?.nextElementSibling?.tagName === 'P') beforeP.push(node);
+  }
+
+  return beforeP;
+};
 
 /*
  Задание 4:
@@ -63,7 +75,7 @@ function findAllPSiblings(where) {}
 function findError(where) {
   const result = [];
 
-  for (const child of where.childNodes) {
+  for (const child of where.children) {
     result.push(child.textContent);
   }
 
@@ -82,7 +94,11 @@ function findError(where) {
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
    должно быть преобразовано в <div></div><p></p>
  */
-function deleteTextNodes(where) {}
+const deleteTextNodes = (where) => {
+  for (const node of where.childNodes) {
+    if (node?.nodeType === 3) node.remove();
+  }
+};
 
 /*
  Задание 6:
@@ -93,10 +109,14 @@ function deleteTextNodes(where) {}
 
  Пример:
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
-   должно быть преобразовано в <span><div><b></b></div><p></p></span>
+   должно быть преобразовано в <span><div><b></b></div><p></p></span>3
  */
-function deleteTextNodesRecursive(where) {}
-
+const deleteTextNodesRecursive = (where) => {
+  for (const node of where.childNodes) {
+    if (node?.nodeType === 3) node.remove();
+    else if (node?.nodeType === 1) deleteTextNodesRecursive(node);
+  }
+};
 /*
  Задание 7 *:
 
@@ -117,7 +137,35 @@ function deleteTextNodesRecursive(where) {}
      texts: 3
    }
  */
-function collectDOMStat(root) {}
+const collectDOMStat = (root) => {
+  const stat = {
+    tags: {},
+    classes: {},
+    texts: 0,
+  };
+
+  const scanNode = (root) => {
+    for (const node of root.childNodes) {
+      if (node.nodeType === 1) {
+        node.tagName in stat.tags
+          ? stat.tags[node.tagName]++
+          : (stat.tags[node.tagName] = 1);
+
+        for (const className of node.classList) {
+          className in stat.classes
+            ? stat.classes[className]++
+            : (stat.classes[className] = 1);
+        }
+      } else if (node.nodeType === 3) stat.texts++;
+
+      scanNode(node);
+    }
+  };
+
+  scanNode(root);
+
+  return stat;
+};
 
 /*
  Задание 8 *:
