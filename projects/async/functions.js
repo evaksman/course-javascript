@@ -26,10 +26,12 @@ const delayPromise = (seconds) =>
  Пример:
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
-const loadAndSortTowns = () =>
+const loadAndSortTowns = () => {
+  const url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
   // Метод fetch() , относящийся к миксину WindowOrWorkerGlobalScope, запускает процесс извлечения ресурса из сети. Возвращает promise, содержащий Response объект (ответ на запрос).
-  fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+  return fetch(url)
     .then((response) => response.json())
-    .then((towns) => towns.sort((a, b) => a.name.localeCompare(b.name)));
+    .then((towns) => towns.sort((a, b) => a?.name?.localeCompare(b?.name)));
+};
 
 export { delayPromise, loadAndSortTowns };
