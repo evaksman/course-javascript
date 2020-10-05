@@ -22,7 +22,7 @@
 
 /*
  homeworkContainer - это контейнер для всех ваших домашних заданий
- Если вы создаете новые html-элементы и добавляете их на страницу, то дабавляйте их только в этот контейнер
+ Если вы создаете новые html-элементы и добавляете их на страницу, то добавляйте их только в этот контейнер
 
  Пример:
    const newDiv = document.createElement('div');
@@ -56,7 +56,7 @@ const loadTowns = () => loadAndSortTowns();
 const isMatching = (full, chunk) => full.toLowerCase().includes(chunk.toLowerCase());
 
 /* Блок с надписью "Загрузка" */
-// const loadingBlock = homeworkContainer.querySelector('#loading-block');
+const loadingBlock = homeworkContainer.querySelector('#loading-block');
 /* Блок с надписью "Не удалось загрузить города" и кнопкой "Повторить" */
 const loadingFailedBlock = homeworkContainer.querySelector('#loading-failed');
 /* Кнопка "Повторить" */
@@ -66,13 +66,49 @@ const filterBlock = homeworkContainer.querySelector('#filter-block');
 /* Текстовое поле для поиска по городам */
 const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
-// const filterResult = homeworkContainer.querySelector('#filter-result');
+const filterResult = homeworkContainer.querySelector('#filter-result');
 
-retryButton.addEventListener('click', () => {});
+let towns = [];
 
-filterInput.addEventListener('input', function () {});
+async function tryToLoadTowns() {
+  try {
+    towns = await loadTowns();
+    loadingBlock.classList.add('hidden'); // скрыли блок с загрузкой
+    loadingFailedBlock.classList.add('hidden'); // скрыли блок с ошибкой загрузки
+    filterBlock.classList.remove('hidden'); // показали блок с инпутом и результатом фильтрации
+  } catch (e) {
+    loadingBlock.classList.add('hidden'); // скрыли блок с загрузкой
+    loadingFailedBlock.classList.remove('hidden'); // показали блок с ошибкой загрузки
+  }
+}
 
+const filter = (substring) => {
+  filterResult.innerHTML = ''; // очищаем содержимое блока
+  const fragment = document.createDocumentFragment(); // фрагмент для множественной вставки названий городов
+
+  for (const town of towns) {
+    if (isMatching(town.name, substring) && substring) {
+      const matchingTown = document.createElement('div');
+      matchingTown.textContent = town.name;
+      fragment.append(matchingTown); // в конце цикла фрагмент, содержащий дивы с отфильтрованными городами
+    }
+  }
+
+  filterResult.append(fragment); // множественная вставка содержимого фрагмента
+};
+
+retryButton.addEventListener('click', () => {
+  loadingFailedBlock.classList.add('hidden'); // скрыли блок с ошибкой загрузки
+  loadingBlock.classList.remove('hidden'); // показали блок с загрузкой
+  tryToLoadTowns();
+}); // нужно вызвать функцию загрузки городов
+
+filterInput.addEventListener('input', () => filter(filterInput.value)); // вызывать функцию фильтрации при вводе в инпут
+
+// первоначальное сокрытие ненужных блоков
 loadingFailedBlock.classList.add('hidden');
 filterBlock.classList.add('hidden');
+
+tryToLoadTowns();
 
 export { loadTowns, isMatching };
