@@ -95,7 +95,7 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 const deleteTextNodes = (where) => {
-  for (const node of where.childNodes) {
+  for (const node of [...where.childNodes]) {
     if (node?.nodeType === 3) node.remove();
   }
 };
@@ -112,11 +112,12 @@ const deleteTextNodes = (where) => {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>3
  */
 const deleteTextNodesRecursive = (where) => {
-  for (const node of where.childNodes) {
+  for (const node of [...where.childNodes]) {
     if (node?.nodeType === 3) node.remove();
     else if (node?.nodeType === 1) deleteTextNodesRecursive(node);
   }
 };
+
 /*
  Задание 7 *:
 
@@ -158,7 +159,7 @@ const collectDOMStat = (root) => {
         }
       } else if (node.nodeType === 3) stat.texts++;
 
-      scanNode(node);
+      if (node?.hasChildNodes()) scanNode(node);
     }
   };
 
