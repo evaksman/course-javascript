@@ -55,7 +55,7 @@ function loadTowns() {}
 function isMatching(full, chunk) {}
 
 /* Блок с надписью "Загрузка" */
-//const loadingBlock = homeworkContainer.querySelector('#loading-block');
+// const loadingBlock = homeworkContainer.querySelector('#loading-block');
 /* Блок с надписью "Не удалось загрузить города" и кнопкой "Повторить" */
 const loadingFailedBlock = homeworkContainer.querySelector('#loading-failed');
 /* Кнопка "Повторить" */
@@ -65,7 +65,7 @@ const filterBlock = homeworkContainer.querySelector('#filter-block');
 /* Текстовое поле для поиска по городам */
 const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
-//const filterResult = homeworkContainer.querySelector('#filter-result');
+// const filterResult = homeworkContainer.querySelector('#filter-result');
 
 retryButton.addEventListener('click', () => {});
 
