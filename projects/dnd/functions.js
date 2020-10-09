@@ -40,7 +40,11 @@ const skipDefault = (eventName, target) =>
  Пример:
    emulateClick(document.querySelector('a')) // для указанного элемента должно быть симулировано события click
  */
-const emulateClick = (target) => target.click();
+// const emulateClick = (target) => target.click();
+const emulateClick = (target) => {
+  const event = new Event('click');
+  target.dispatchEvent(event);
+};
 
 /*
  Задание 6:
@@ -67,12 +71,6 @@ const delegate = (target, fn) => {
  Пример:
    once(document.querySelector('button'), () => console.log('обработчик выполнился!')) // добавит такой обработчик кликов для указанного элемента, который вызовется только один раз и затем удалится
  */
-const once = (target, fn) => {
-  const handler = () => {
-    fn();
-    target.removeEventListener('click', handler);
-  };
-  target.addEventListener('click', handler);
-};
+const once = (target, fn) => target.addEventListener('click', fn, { once: true });
 
 export { addListener, removeListener, skipDefault, emulateClick, delegate, once };
