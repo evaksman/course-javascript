@@ -19,7 +19,16 @@ import './dnd.html';
 
 const homeworkContainer = document.querySelector('#app');
 
-document.addEventListener('mousemove', (e) => {});
+let currentDraggableDiv,
+  xIndent = 0,
+  yIndent = 0;
+
+document.addEventListener('mousemove', (e) => {
+  if (currentDraggableDiv) {
+    currentDraggableDiv.style.top = e.clientY - yIndent + 'px';
+    currentDraggableDiv.style.left = e.clientX - xIndent + 'px';
+  }
+});
 
 function randomSize(minSize, maxSize) {
   const size = {},
@@ -51,21 +60,30 @@ function randomPosition() {
 }
 
 export function createDiv() {
-  const newDiv = document.createElement('div');
+  const minSize = 20,
+    maxSize = 200,
+    newDiv = document.createElement('div');
+
   newDiv.classList.add('draggable-div');
 
   newDiv.style.background = randomColor();
-  console.log(newDiv.style.background);
 
   const position = randomPosition();
-  console.log(position);
   newDiv.style.left = position.coordX + 'px';
   newDiv.style.top = position.coordY + 'px';
 
-  const size = randomSize(20, 200);
-  console.log(size);
+  const size = randomSize(minSize, maxSize);
   newDiv.style.width = size.width + 'px';
   newDiv.style.height = size.height + 'px';
+
+  newDiv.addEventListener('mousedown', (e) => {
+    currentDraggableDiv = newDiv;
+    // координаты относительно этого узла
+    xIndent = e.offsetX;
+    yIndent = e.offsetY;
+  });
+
+  newDiv.addEventListener('mouseup', () => (currentDraggableDiv = false));
 
   return newDiv;
 }
