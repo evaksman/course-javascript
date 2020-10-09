@@ -41,10 +41,7 @@ const skipDefault = (eventName, target) =>
    emulateClick(document.querySelector('a')) // для указанного элемента должно быть симулировано события click
  */
 // const emulateClick = (target) => target.click();
-const emulateClick = (target) => {
-  const event = new Event('click');
-  target.dispatchEvent(event);
-};
+const emulateClick = (target) => target.dispatchEvent(new MouseEvent('click'));
 
 /*
  Задание 6:
@@ -60,6 +57,11 @@ const delegate = (target, fn) => {
   for (const button of buttons) {
     button.addEventListener('click', fn);
   }
+
+  // вариант Сергея Мелюкова
+  // target.addEventListener('click', (e) => {
+  //   if (e.target.tagName === 'BUTTON') fn();
+  // });
 };
 
 /*
