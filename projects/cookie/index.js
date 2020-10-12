@@ -33,13 +33,13 @@ import './cookie.html';
    const newDiv = document.createElement('div');
    homeworkContainer.appendChild(newDiv);
  */
-const homeworkContainer = document.querySelector('#homework-container');
+const homeworkContainer = document.querySelector('#app');
 // текстовое поле для фильтрации cookie
 const filterNameInput = homeworkContainer.querySelector('#filter-name-input');
 // текстовое поле с именем cookie
-// const addNameInput = homeworkContainer.querySelector('#add-name-input');
+const addNameInput = homeworkContainer.querySelector('#add-name-input');
 // текстовое поле со значением cookie
-// const addValueInput = homeworkContainer.querySelector('#add-value-input');
+const addValueInput = homeworkContainer.querySelector('#add-value-input');
 // кнопка "добавить cookie"
 const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
@@ -47,6 +47,23 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 filterNameInput.addEventListener('input', function () {});
 
-addButton.addEventListener('click', () => {});
+addButton.addEventListener('click', () => {
+  const name = addNameInput.value,
+    value = addValueInput.value;
+
+  if (!name) {
+    alert('Не задано имя для cookie!');
+    return;
+  }
+
+  alert(`Cookie "${name}=${value}" добавлена!`);
+
+  document.cookie = `${name}=${value}`;
+
+  addNameInput.value = '';
+  addValueInput.value = '';
+
+  // тут надо перерисовать таблицу с имеющимися куками
+});
 
 listTable.addEventListener('click', (e) => {});
