@@ -116,4 +116,15 @@ addButton.addEventListener('click', () => {
   redrawTable();
 });
 
-listTable.addEventListener('click', (e) => {});
+listTable.addEventListener('click', (e) => {
+  const cookieName = e.target.dataset.cookie;
+
+  if (e.target.classList.contains('remove-btn')) {
+    // удаляем cookie из браузера
+    document.cookie = `${cookieName}=deleted; max-age=0`;
+    // удаляем cookie из объекта
+    delete cookies[cookieName];
+    // перерисовка таблицы
+    redrawTable();
+  }
+});
