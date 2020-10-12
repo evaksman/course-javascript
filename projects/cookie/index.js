@@ -45,6 +45,51 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+const getCookies = () => {
+  return document.cookie.split('; ').reduce((prev, current) => {
+    const [name, value] = current.split('=');
+    prev[name] = value;
+    return prev;
+  }, {});
+};
+
+const redrawTable = () => {
+  const fragment = document.createDocumentFragment();
+
+  listTable.innerHTML = '';
+
+  for (const cookieName in cookies) {
+    if (!filterNameInput.value) {
+      const cookieTR = document.createElement('tr'),
+        cookieNameTD = document.createElement('td'),
+        cookieValueTD = document.createElement('td'),
+        removeTD = document.createElement('td'),
+        removeBtn = document.createElement('button');
+
+      removeBtn.textContent = 'Удалить';
+      removeBtn.classList.add('remove-btn');
+      removeBtn.dataset.cookie = cookieName;
+
+      cookieNameTD.textContent = cookieName;
+
+      cookieValueTD.textContent = cookies[cookieName];
+      cookieValueTD.classList.add('value');
+
+      removeTD.append(removeBtn);
+      cookieTR.append(cookieNameTD, cookieValueTD, removeTD);
+      fragment.append(cookieTR);
+    }
+  }
+
+  if (cookies) {
+    listTable.append(fragment);
+  }
+};
+
+const cookies = getCookies();
+
+redrawTable();
+
 filterNameInput.addEventListener('input', function () {});
 
 addButton.addEventListener('click', () => {
@@ -54,16 +99,21 @@ addButton.addEventListener('click', () => {
   if (!name) {
     alert('Не задано имя для cookie!');
     return;
+  } else if (!value) {
+    alert('Не задано значение для cookie!');
+    return;
   }
 
-  alert(`Cookie "${name}=${value}" добавлена!`);
+  alert(`Cookie "${name}=${value}" добавлена/обновлена!`);
 
   document.cookie = `${name}=${value}`;
 
   addNameInput.value = '';
   addValueInput.value = '';
 
-  // тут надо перерисовать таблицу с имеющимися куками
+  // тут надо добавить куки в браузер и перерисовать таблицу
+  cookies[name] = value;
+  redrawTable();
 });
 
 listTable.addEventListener('click', (e) => {});
