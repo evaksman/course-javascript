@@ -48,11 +48,14 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 let filter = '';
 
 function getCookies() {
-  return document.cookie.split('; ').reduce((prev, current) => {
-    const [name, value] = current.split('=');
-    prev[name] = value;
-    return prev;
-  }, {});
+  return document.cookie
+    .split('; ')
+    .filter(Boolean)
+    .reduce((prev, current) => {
+      const [name, value] = current.split('=');
+      prev[name] = value;
+      return prev;
+    }, {});
 }
 
 function redrawTable() {
@@ -61,7 +64,7 @@ function redrawTable() {
 
   listTable.innerHTML = '';
 
-  if (cookies) {
+  if (Object.entries(cookies).length) {
     for (const cookieName in cookies) {
       const ifNameMatches = cookieName.toLowerCase().includes(filter.toLowerCase()),
         ifValueMatches = cookies[cookieName].toLowerCase().includes(filter.toLowerCase());
