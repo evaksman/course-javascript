@@ -45,7 +45,6 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-const cookies = getCookies();
 let filter = '';
 
 function getCookies() {
@@ -58,36 +57,37 @@ function getCookies() {
 
 function redrawTable() {
   const fragment = document.createDocumentFragment();
+  const cookies = getCookies();
 
   listTable.innerHTML = '';
 
-  for (const cookieName in cookies) {
-    const ifNameMatches = cookieName.toLowerCase().includes(filter.toLowerCase()),
-      ifValueMatches = cookies[cookieName].toLowerCase().includes(filter.toLowerCase());
-
-    if (filter && !ifNameMatches && !ifValueMatches) continue;
-
-    const cookieTR = document.createElement('tr'),
-      cookieNameTD = document.createElement('td'),
-      cookieValueTD = document.createElement('td'),
-      removeTD = document.createElement('td'),
-      removeBtn = document.createElement('button');
-
-    removeBtn.textContent = 'Удалить';
-    removeBtn.classList.add('remove-btn');
-    removeBtn.dataset.cookie = cookieName;
-
-    cookieNameTD.textContent = cookieName;
-
-    cookieValueTD.textContent = cookies[cookieName];
-    cookieValueTD.classList.add('value');
-
-    removeTD.append(removeBtn);
-    cookieTR.append(cookieNameTD, cookieValueTD, removeTD);
-    fragment.append(cookieTR);
-  }
-
   if (cookies) {
+    for (const cookieName in cookies) {
+      const ifNameMatches = cookieName.toLowerCase().includes(filter.toLowerCase()),
+        ifValueMatches = cookies[cookieName].toLowerCase().includes(filter.toLowerCase());
+
+      if (filter && !ifNameMatches && !ifValueMatches) continue;
+
+      const cookieTR = document.createElement('tr'),
+        cookieNameTD = document.createElement('td'),
+        cookieValueTD = document.createElement('td'),
+        removeTD = document.createElement('td'),
+        removeBtn = document.createElement('button');
+
+      removeBtn.textContent = 'Удалить';
+      removeBtn.classList.add('remove-btn');
+      removeBtn.dataset.cookie = cookieName;
+
+      cookieNameTD.textContent = cookieName;
+
+      cookieValueTD.textContent = cookies[cookieName];
+      cookieValueTD.classList.add('value');
+
+      removeTD.append(removeBtn);
+      cookieTR.append(cookieNameTD, cookieValueTD, removeTD);
+      fragment.append(cookieTR);
+    }
+
     listTable.append(fragment);
   }
 }
@@ -112,15 +112,10 @@ addButton.addEventListener('click', () => {
     return;
   }
 
-  // alert(`Cookie "${name}=${value}" добавлена/обновлена!`);
-
-  document.cookie = `${name}=${value}`;
-
   addNameInput.value = '';
   addValueInput.value = '';
 
-  // тут надо добавить куки в браузер и перерисовать таблицу
-  cookies[name] = value;
+  document.cookie = `${name}=${value}`;
   redrawTable();
 });
 
@@ -130,8 +125,6 @@ listTable.addEventListener('click', (e) => {
   if (e.target.classList.contains('remove-btn')) {
     // удаляем cookie из браузера
     document.cookie = `${cookieName}=deleted; max-age=0`;
-    // удаляем cookie из объекта
-    delete cookies[cookieName];
     // перерисовка таблицы
     redrawTable();
   }
