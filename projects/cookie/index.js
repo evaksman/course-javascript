@@ -110,13 +110,14 @@ addButton.addEventListener('click', () => {
   if (!name) {
     alert('Не задано имя для cookie!');
     return;
-  } else if (!value) {
-    alert('Не задано значение для cookie!');
-    return;
   }
+  // } else if (!value) {
+  //   alert('Не задано значение для cookie!');
+  //   return;
+  // }
 
-  addNameInput.value = '';
-  addValueInput.value = '';
+  // addNameInput.value = '';
+  // addValueInput.value = '';
 
   document.cookie = `${name}=${value}`;
   redrawTable();
