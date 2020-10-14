@@ -71,11 +71,11 @@ function redrawTable() {
 
       if (filter && !ifNameMatches && !ifValueMatches) continue;
 
-      const cookieTR = document.createElement('tr'),
-        cookieNameTD = document.createElement('td'),
-        cookieValueTD = document.createElement('td'),
-        removeTD = document.createElement('td'),
-        removeBtn = document.createElement('button');
+      const cookieTR = document.createElement('tr');
+      const cookieNameTD = document.createElement('td');
+      const cookieValueTD = document.createElement('td');
+      const removeTD = document.createElement('td');
+      const removeBtn = document.createElement('button');
 
       removeBtn.textContent = 'Удалить';
       removeBtn.classList.add('remove-btn');
@@ -99,7 +99,6 @@ redrawTable();
 
 filterNameInput.addEventListener('input', function (e) {
   filter = e.target.value;
-  // каждый раз при вводе в инпут нужно перерисовывать таблицу
   redrawTable();
 });
 
@@ -111,14 +110,6 @@ addButton.addEventListener('click', () => {
     alert('Не задано имя для cookie!');
     return;
   }
-  // } else if (!value) {
-  //   alert('Не задано значение для cookie!');
-  //   return;
-  // }
-
-  // addNameInput.value = '';
-  // addValueInput.value = '';
-
   document.cookie = `${name}=${value}`;
   redrawTable();
 });
@@ -127,9 +118,7 @@ listTable.addEventListener('click', (e) => {
   const cookieName = e.target.dataset.cookie;
 
   if (e.target.classList.contains('remove-btn')) {
-    // удаляем cookie из браузера
     document.cookie = `${cookieName}=deleted; max-age=0`;
-    // перерисовка таблицы
     redrawTable();
   }
 });
