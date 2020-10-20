@@ -46,7 +46,7 @@ module.exports = {
     plugins: [
         new HtmlPlugin({
             title: 'GeoReview',
-            template: 'index.hbs'
+            template: './src/index.hbs'
         }),
         new ExtractTextPlugin('style.css'),
         new CleanWebpackPlugin(['dist'])
